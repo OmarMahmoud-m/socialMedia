@@ -38,8 +38,14 @@ async function Login() {
   };
   try {
     const response = await axios.post(`${baseUrl}/login`, params);
-    console.log("login response:");
-    console.log(response.data);
+
+    localStorage.setItem("token", response.data.token)
+    localStorage.setItem("user", JSON.stringify(response.data.user))
+
+    const modal = document.getElementById("login-modal")
+    const modalInstance = bootstrap.Modal.getInstance(modal)
+    modalInstance.hide()
+    
   } catch (error) {
     console.log("Login error:", error.response.data);
   }
