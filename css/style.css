@@ -12,5 +12,6 @@ body{
   position: fixed;
   bottom: 0;
   right: 10px;
-  width: 15%;
+  width: 20%;
+  z-index: 999999;
 }

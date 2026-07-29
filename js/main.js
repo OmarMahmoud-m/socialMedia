@@ -34,7 +34,7 @@ async function login() {
   const password = document.getElementById("password-input").value;
   const params = {
     username,
-    password,
+    password
   };
   try {
     const response = await axios.post(`${baseUrl}/login`, params);
@@ -46,22 +46,49 @@ async function login() {
     const modalInstance = bootstrap.Modal.getInstance(modal);
     modalInstance.hide();
     setupUI()
-    showSuccessAlert("Logged in successfully");
+    showAlert("Logged in successfully", "success");
     
   } catch (error) {
     console.log("Login error:", error.response.data);
   }
 }
 
+async function register(){
+  const name = document.getElementById("register-name-input").value; 
+  const username = document.getElementById("register-username-input").value;
+  const password = document.getElementById("register-password-input").value;
+  const params = {
+    username,
+    password,
+    name
+  };
+  try {
+    const response = await axios.post(`${baseUrl}/register`, params);
+
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
+
+    const modal = document.getElementById("register-modal");
+    const modalInstance = bootstrap.Modal.getInstance(modal);
+    modalInstance.hide();
+    setupUI()
+    showAlert("New User Registered successfully", "success");
+    
+  } catch (error) {
+    const message = error.response.data.message;
+    showAlert(message, "danger")
+  } 
+}
+
 function logout(){
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   setupUI();
-  showSuccessAlert("Logged out successfully")
+  showAlert("Logged out successfully", "success")
   
 }
 
-function showSuccessAlert(customMessage) {
+function showAlert(customMessage, type) {
   const alertPlaceholder = document.getElementById("success-alert");
   const appendAlert = (message, type) => {
     const wrapper = document.createElement("div");
@@ -74,7 +101,7 @@ function showSuccessAlert(customMessage) {
 
     alertPlaceholder.append(wrapper);
   };  
-  appendAlert(customMessage, "success"); 
+  appendAlert(customMessage, type); 
   setTimeout(() => {
     const alertToHide = bootstrap.Alert.getOrCreateInstance('#success-alert')
     alertToHide.close()
