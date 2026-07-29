@@ -29,25 +29,52 @@ async function fetchPosts() {
             </div>`;
   });
 }
-async function Login() {
+async function login() {
   const username = document.getElementById("username-input").value;
   const password = document.getElementById("password-input").value;
   const params = {
     username,
-    password
+    password,
   };
   try {
     const response = await axios.post(`${baseUrl}/login`, params);
 
-    localStorage.setItem("token", response.data.token)
-    localStorage.setItem("user", JSON.stringify(response.data.user))
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
 
-    const modal = document.getElementById("login-modal")
-    const modalInstance = bootstrap.Modal.getInstance(modal)
-    modalInstance.hide()
-    
+    const modal = document.getElementById("login-modal");
+    const modalInstance = bootstrap.Modal.getInstance(modal);
+    modalInstance.hide();
+    alert("user logged in successfully");
+    setupUI()
   } catch (error) {
     console.log("Login error:", error.response.data);
   }
 }
+
+function logout(){
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  alert("logged out successfully")
+  setupUI()
+}
+
+ function setupUI(){
+  const token = localStorage.getItem("token");
+
+  const loginDiv = document.getElementById("login-div");
+  
+  const logoutDiv = document.getElementById("logout-div");
+  
+  if(token == null){
+    loginDiv.style.setProperty("display", "flex", "important")
+    logoutDiv.style.setProperty("display", "none", "important")
+  }
+  else{
+    loginDiv.style.setProperty("display", "none", "important")
+    logoutDiv.style.setProperty("display", "flex", "important")
+  }
+
+ }
 fetchPosts();
+setupUI();

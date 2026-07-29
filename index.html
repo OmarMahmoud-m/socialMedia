@@ -43,7 +43,11 @@
                 <label for="message-text" class="col-form-label"
                   >Password:</label
                 >
-                <input type="password" class="form-control" id="password-input" />
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password-input"
+                />
               </div>
             </form>
           </div>
@@ -55,12 +59,17 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary" onclick="Login()">Login</button>
+            <button type="button" class="btn btn-primary" onclick="login()">
+              Login
+            </button>
           </div>
         </div>
       </div>
     </div>
     <!--// Login Modal //-->
+    <!--// Modals //-->
+
+
 
     <div class="container">
       <div class="d-flex justify-content-center">
@@ -92,18 +101,40 @@
                     <a class="nav-link" href="#">Profile</a>
                   </li>
                 </ul>
-                <div class="d-flex w-100 justify-content-end"></div>
-                <button
-                  type="button"
-                  class="btn btn-outline-success mx-1"
-                  data-bs-toggle="modal"
-                  data-bs-target="#login-modal"
-                >
-                  Login
-                </button>
-                <button type="button" class="btn btn-outline-success">
-                  Register
-                </button>
+                <!-- NON-LOGGED IN USER -->
+                <div class="d-flex w-100 justify-content-end" id="login-div">
+                  <button
+                    type="button"
+                    id="login-btn"
+                    class="btn btn-outline-success mx-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#login-modal"
+                  >
+                    Login
+                  </button>
+                  <button
+                    type="button"
+                    id="register-btn"
+                    class="btn btn-outline-success"
+                  >
+                    Register
+                  </button>
+                </div>
+                <!--// NON-LOGGED IN USER //-->
+
+                <!-- FOR LOGGED IN USER -->
+                 <div class="d-flex w-100 justify-content-end" id="logout-div">
+                  <button
+                    type="button"
+                    id="logout-btn"
+                    class="btn btn-outline-danger mx-1"
+                    data-bs-toggle="modal"
+                    onclick="logout()"
+                  >
+                    Logout
+                  </button>
+                </div>
+                <!--// FOR LOGGED IN USER //-->
               </div>
             </div>
           </nav>
