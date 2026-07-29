@@ -8,3 +8,9 @@ body{
 .card-body h6{
   color: rgb(139, 139, 139);
 }
+#success-alert{
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  width: 15%;
+}

@@ -45,8 +45,9 @@ async function login() {
     const modal = document.getElementById("login-modal");
     const modalInstance = bootstrap.Modal.getInstance(modal);
     modalInstance.hide();
-    alert("user logged in successfully");
     setupUI()
+    showSuccessAlert("Logged in successfully");
+    
   } catch (error) {
     console.log("Login error:", error.response.data);
   }
@@ -55,10 +56,31 @@ async function login() {
 function logout(){
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  alert("logged out successfully")
-  setupUI()
+  setupUI();
+  showSuccessAlert("Logged out successfully")
+  
 }
 
+function showSuccessAlert(customMessage) {
+  const alertPlaceholder = document.getElementById("success-alert");
+  const appendAlert = (message, type) => {
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = [
+      `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+      `   <div>${message}</div>`,
+      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      "</div>",
+    ].join("");
+
+    alertPlaceholder.append(wrapper);
+  };  
+  appendAlert(customMessage, "success"); 
+  setTimeout(() => {
+    const alertToHide = bootstrap.Alert.getOrCreateInstance('#success-alert')
+    alertToHide.close()
+  }, 2000)
+
+}
  function setupUI(){
   const token = localStorage.getItem("token");
 
