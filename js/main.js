@@ -133,7 +133,8 @@ function showAlert(customMessage, type) {
     logoutDiv.style.setProperty("display", "flex", "important")
     addPostBtn.style.setProperty("display", "block", "important")
     const user = getCurrentUser();
-    document.getElementById("navbar-user").innerHTML = user.username
+    document.getElementById("navbar-user").innerHTML = user.username;
+    document.getElementById("navbar-user-image").src = user.profile_image
   }
 
  }
