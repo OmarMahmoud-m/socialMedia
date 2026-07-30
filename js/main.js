@@ -4,10 +4,11 @@ const baseUrl = "https://tarmeezacademy.com/api/v1";
 async function fetchPosts() {
   const response = await axios.get(`${baseUrl}/posts?limit=50`);
   console.log(response.data.data);
+  postsHtmlContainer.innerHTML = "";
   response.data.data.forEach((post) => {
     postsHtmlContainer.innerHTML += `            <div class="card shadow mb-5">
               <h5 class="card-header">
-                <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2" />
+                <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
                 <b>@${post.author.username}</b>
               </h5>
               <div class="card-body">
@@ -110,20 +111,56 @@ function showAlert(customMessage, type) {
 }
  function setupUI(){
   const token = localStorage.getItem("token");
-
+  
+  
   const loginDiv = document.getElementById("login-div");
   
   const logoutDiv = document.getElementById("logout-div");
+  const addPostBtn = document.getElementById("add-post-btn");
+  
   
   if(token == null){
     loginDiv.style.setProperty("display", "flex", "important")
     logoutDiv.style.setProperty("display", "none", "important")
+    addPostBtn.style.setProperty("display", "none", "important")
   }
   else{
     loginDiv.style.setProperty("display", "none", "important")
     logoutDiv.style.setProperty("display", "flex", "important")
+    addPostBtn.style.setProperty("display", "block", "important")
   }
 
+ }
+ async function createPost(){
+  const title = document.getElementById("post-title-input").value;
+  const body = document.getElementById("post-body-input").value;
+  const image = document.getElementById("post-image-input").files[0];
+
+  let formData = new FormData();
+  formData.append("body",body)
+  formData.append("title",title)
+  formData.append("image",image)
+
+  const headers = {
+    "Content-type": "multipart/form-data",
+    "authorization": `Bearer ${localStorage.getItem("token")}`
+  }
+
+  try {
+    const response = await axios.post(`${baseUrl}/posts`, formData, {
+      headers
+    });
+    console.log(response)
+    const modal = document.getElementById("create-post-modal");
+    const modalInstance = bootstrap.Modal.getInstance(modal);
+    modalInstance.hide();
+    showAlert("New Post Has Been Created", "success")
+    fetchPosts();
+    
+  } catch (error) {
+    const message = error.response.data.message;
+    showAlert(message, "danger")
+  }
  }
 fetchPosts();
 setupUI();
