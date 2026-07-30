@@ -55,17 +55,21 @@ async function login() {
 }
 
 async function register(){
+  const image = document.getElementById("register-image-input").files[0];
   const name = document.getElementById("register-name-input").value; 
   const username = document.getElementById("register-username-input").value;
   const password = document.getElementById("register-password-input").value;
-  const params = {
-    username,
-    password,
-    name
-  };
-  try {
-    const response = await axios.post(`${baseUrl}/register`, params);
 
+  let formData = new FormData();
+  formData.append("name", name);
+  formData.append("username", username);
+  formData.append("password", password);
+  formData.append("image", image);  
+  
+
+  try {
+    const response = await axios.post(`${baseUrl}/register`, formData);
+    console.log("this is register data", response.data)
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
 
