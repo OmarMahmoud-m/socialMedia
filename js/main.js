@@ -128,6 +128,8 @@ function showAlert(customMessage, type) {
     loginDiv.style.setProperty("display", "none", "important")
     logoutDiv.style.setProperty("display", "flex", "important")
     addPostBtn.style.setProperty("display", "block", "important")
+    const user = getCurrentUser();
+    document.getElementById("navbar-user").innerHTML = user.username
   }
 
  }
@@ -161,6 +163,14 @@ function showAlert(customMessage, type) {
     const message = error.response.data.message;
     showAlert(message, "danger")
   }
+ }
+ function getCurrentUser(){
+  let user = null;
+  const storageUser = localStorage.getItem("user");
+  if(storageUser != null){
+    user = JSON.parse(storageUser);
+  }
+  return user;
  }
 fetchPosts();
 setupUI();
