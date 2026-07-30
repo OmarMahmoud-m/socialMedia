@@ -1,10 +1,24 @@
 const postsHtmlContainer = document.querySelector(".posts");
 const baseUrl = "https://tarmeezacademy.com/api/v1";
+let currentPage = 1;
+let lastPage = 1;
 
-async function fetchPosts() {
-  const response = await axios.get(`${baseUrl}/posts?limit=50`);
+//=====INFINITE SCROLL=====//
+window.addEventListener("scroll", function(){
+  const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
+  if(endOfPage && currentPage < lastPage){
+    fetchPosts(false,++currentPage)
+  }
+})
+
+async function fetchPosts(reload = true, page = 1) {
+  const response = await axios.get(`${baseUrl}/posts?limit=2&page=${page}`);
   console.log(response.data.data);
-  postsHtmlContainer.innerHTML = "";
+  lastPage = response.data.meta.last_page;
+  if(reload){
+    postsHtmlContainer.innerHTML = "";
+  }
+  
   response.data.data.forEach((post) => {
     postsHtmlContainer.innerHTML += `            <div class="card shadow mb-5">
               <h5 class="card-header">

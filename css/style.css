@@ -21,6 +21,7 @@ body{
   right: 1%;
   font-size: 50px;
   cursor: pointer;
+  z-index: 10;
 }
 #post-body-input{
   width: 100%;
