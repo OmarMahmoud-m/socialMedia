@@ -1,4 +1,6 @@
 const baseUrl = "https://tarmeezacademy.com/api/v1";
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get("postId")
 
 async function login() {
   const username = document.getElementById("username-input").value;
@@ -111,4 +113,38 @@ function getCurrentUser() {
   }
   return user;
 }
+async function fetchPost() {
+  const response = await axios.get(`${baseUrl}/posts/${id}`);
+  const post = response.data.data;
+  const comments = post.comments;
+  const author = post.author;
+
+  document.getElementById("username-span").innerHTML = author.username;
+
+  const postContent = `<div class="card shadow mb-5">
+              <h5 class="card-header">
+                <img src="${author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
+                <b>@${author.username}</b>
+              </h5>
+              <div class="card-body">
+                <img src="${post.image}" onerror="this.style.display='none'" class="w-100 mb-1" />
+                <h6>${post.created_at}</h6>
+                <h5>${post.title ? post.title : ""}</h5>
+                <p>
+                  ${post.body}
+                </p>
+                <hr />
+                <div>
+                  <i
+                    class="fa-solid fa-message"
+                    style="color: rgb(128, 131, 131)"
+                  ></i>
+                  <span>(${post.comments_count}) comments</span>
+                </div>
+              </div>
+            </div>`
+  document.getElementById("post").innerHTML = postContent
+  
+}
 setupUI();
+fetchPost();

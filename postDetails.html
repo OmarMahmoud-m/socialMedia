@@ -305,7 +305,7 @@
         <div class="row d-flex justify-content-center mt-5">
           <div class="col-9">
             <h1>
-            <span>
+            <span id="username-span">
               Omar's
             </span>
             Post
@@ -314,29 +314,8 @@
         </div>
       <!--// USERS'S POST //-->
         <div class="row d-flex justify-content-center mt-5">
-          <div class="col-9">
-            <div class="card shadow mb-5">
-              <h5 class="card-header">
-                <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
-                <b>@${post.author.username}</b>
-              </h5>
-              <div class="card-body">
-                <img src="${post.image}" onerror="this.style.display='none'" class="w-100 mb-1" />
-                <h6>${post.created_at}</h6>
-                <h5>${post.title ? post.title : ""}</h5>
-                <p>
-                  ${post.body}
-                </p>
-                <hr />
-                <div>
-                  <i
-                    class="fa-solid fa-message"
-                    style="color: rgb(128, 131, 131)"
-                  ></i>
-                  <span>(${post.comments_count}) comments</span>
-                </div>
-              </div>
-            </div>
+          <div class="col-9" id="post">
+            
           </div>
         </div>
 

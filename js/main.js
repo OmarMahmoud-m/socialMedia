@@ -13,7 +13,6 @@ window.addEventListener("scroll", function(){
 
 async function fetchPosts(reload = true, page = 1) {
   const response = await axios.get(`${baseUrl}/posts?limit=2&page=${page}`);
-  console.log(response.data.data);
   lastPage = response.data.meta.last_page;
   if(reload){
     postsHtmlContainer.innerHTML = "";
