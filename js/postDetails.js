@@ -1,6 +1,6 @@
 const baseUrl = "https://tarmeezacademy.com/api/v1";
 const urlParams = new URLSearchParams(window.location.search);
-const id = urlParams.get("postId")
+const id = urlParams.get("postId");
 
 async function login() {
   const username = document.getElementById("username-input").value;
@@ -120,7 +120,26 @@ async function fetchPost() {
   const author = post.author;
 
   document.getElementById("username-h1").innerHTML = `${author.username} Post`;
+  let commentsContent = ``;
 
+  for (comment of comments) {
+    commentsContent += `<!-- COMMENT -->
+          <div class="comments p-3">
+            <!-- PFP + USERNAME -->
+            <div class= "d-flex align-items-center gap-2">
+              <img src="${comment.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="comment-pfp rounded-circle" alt="">
+              <b>${comment.author.username}</b>
+            </div>
+            <!--// PFP + USERNAME //-->
+
+            <!-- COMMENTS BODY -->
+            <div class="mt-1">
+              ${comment.body}
+            </div>
+            <!--// COMMENTS BODY //-->
+          </div>
+          <!--// COMMENT //-->`;
+  }
   const postContent = `<div class="card shadow mb-5">
               <h5 class="card-header">
                 <img src="${author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
@@ -142,9 +161,14 @@ async function fetchPost() {
                   <span>(${post.comments_count}) comments</span>
                 </div>
               </div>
-            </div>`
-  document.getElementById("post").innerHTML = postContent
-  
+        
+        <div id="comments">
+          ${commentsContent}
+        </div>
+        
+            </div>
+            `;
+  document.getElementById("post").innerHTML = postContent;
 }
 setupUI();
 fetchPost();
