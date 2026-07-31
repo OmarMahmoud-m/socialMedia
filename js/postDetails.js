@@ -119,7 +119,7 @@ async function fetchPost() {
   const comments = post.comments;
   const author = post.author;
 
-  document.getElementById("username-span").innerHTML = author.username;
+  document.getElementById("username-h1").innerHTML = `${author.username} Post`;
 
   const postContent = `<div class="card shadow mb-5">
               <h5 class="card-header">
