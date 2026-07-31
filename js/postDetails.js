@@ -165,10 +165,35 @@ async function fetchPost() {
         <div id="comments">
           ${commentsContent}
         </div>
+
+        <div class="input-group mb-3" id="add-comment-div">
+          <input id="comment-input" type="text" placeholder="Add Comment" class="form-control">
+          <button class="btn btn-outline-primary" type="button" onClick="addComment()">send</button>
+        </div>
         
             </div>
             `;
   document.getElementById("post").innerHTML = postContent;
 }
+async function addComment(){
+  try {
+  let commentBody = document.getElementById("comment-input").value;
+  let params = {
+    "body": commentBody
+  }
+  let token = localStorage.getItem("token");
+  const response = await axios.post(`${baseUrl}/posts/${id}/comments`, params, {
+    headers: {
+      "authorization": `Bearer ${token}`
+    }
+  })
+  console.log(response.data)
+  showAlert("Comment has been added successfully", "success")
+  fetchPost();
+} catch(error){
+  const errorMessage = error.response.data.message;
+  showAlert(errorMessage, "danger")
+}
+ }
 setupUI();
 fetchPost();
