@@ -25,7 +25,7 @@ async function fetchPosts(reload = true, page = 1) {
                 <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
                 <b>@${post.author.username}</b>
               </h5>
-              <div class="card-body">
+              <div class="card-body" onClick="postClicked(${post.id})">
                 <img src="${post.image}" onerror="this.style.display='none'" class="w-100 mb-1" />
                 <h6>${post.created_at}</h6>
                 <h5>${post.title ? post.title : ""}</h5>
@@ -190,6 +190,9 @@ function showAlert(customMessage, type) {
     user = JSON.parse(storageUser);
   }
   return user;
+ }
+ function postClicked(postId){
+  window.location = `postDetails.html?postId=${postId}`
  }
 fetchPosts();
 setupUI();

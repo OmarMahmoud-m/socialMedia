@@ -1,17 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
     <script src="./js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="./css/all.min.css" />
     <link rel="stylesheet" href="./css/bootstrap.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-<body>
-     <!--========= Modals ============-->
+  </head>
+  <body>
+    <!--========= Modals ============-->
 
     <!-- Login Modal -->
     <div
@@ -93,7 +93,9 @@
           <div class="modal-body">
             <form>
               <div class="mb-3">
-                <label for="recipient-name" class="col-form-label">Profile Image:</label>
+                <label for="recipient-name" class="col-form-label"
+                  >Profile Image:</label
+                >
                 <input
                   type="file"
                   class="form-control"
@@ -208,10 +210,12 @@
     <!--// Create Post Modal //-->
     <!--//============== Modals============ //-->
 
-        <!-- Alerts -->
+    <!-- Alerts -->
     <div id="success-alert" class="show fade"></div>
     <!--// Alerts //-->
-      <div class="container">
+
+    <!-- NAV BAR -->
+    <div class="container">
       <div class="d-flex justify-content-center">
         <div class="col-9">
           <nav
@@ -265,9 +269,13 @@
                 <!--// NON-LOGGED IN USER //-->
 
                 <!-- FOR LOGGED IN USER -->
-                 <div class="d-flex w-100 justify-content-end" id="logout-div">
+                <div class="d-flex w-100 justify-content-end" id="logout-div">
                   <div class="d-flex align-items-center mx-3">
-                    <img src="noProfileImage.jpg" class="profile-img rounded-circle border border-2 mx-1" id="navbar-user-image">
+                    <img
+                      src="noProfileImage.jpg"
+                      class="profile-img rounded-circle border border-2 mx-1"
+                      id="navbar-user-image"
+                    />
                     <b id="navbar-user">Omar</b>
                   </div>
 
@@ -288,6 +296,53 @@
         </div>
       </div>
     </div>
+    <!--// NAV BAR //-->
+
+    <!-- MAIN CONTENT -->
+     <div class="container">
+
+      <!-- USERS'S POST -->
+        <div class="row d-flex justify-content-center mt-5">
+          <div class="col-9">
+            <h1>
+            <span>
+              Omar's
+            </span>
+            Post
+          </h1>
+          </div>
+        </div>
+      <!--// USERS'S POST //-->
+        <div class="row d-flex justify-content-center mt-5">
+          <div class="col-9">
+            <div class="card shadow mb-5">
+              <h5 class="card-header">
+                <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
+                <b>@${post.author.username}</b>
+              </h5>
+              <div class="card-body">
+                <img src="${post.image}" onerror="this.style.display='none'" class="w-100 mb-1" />
+                <h6>${post.created_at}</h6>
+                <h5>${post.title ? post.title : ""}</h5>
+                <p>
+                  ${post.body}
+                </p>
+                <hr />
+                <div>
+                  <i
+                    class="fa-solid fa-message"
+                    style="color: rgb(128, 131, 131)"
+                  ></i>
+                  <span>(${post.comments_count}) comments</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+     </div>
+     <!--// MAIN CONTENT //-->
+
     <script src="./js/postDetails.js"></script>
-</body>
+  </body>
 </html>
