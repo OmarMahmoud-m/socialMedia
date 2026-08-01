@@ -87,6 +87,7 @@ function setupUI() {
 
   const logoutDiv = document.getElementById("logout-div");
   const addPostBtn = document.getElementById("add-post-btn");
+  const addCommentDiv = document.getElementById("add-comment-div");
 
   if (token == null) {
     if (addPostBtn != null) {
@@ -94,9 +95,15 @@ function setupUI() {
     }
     loginDiv.style.setProperty("display", "flex", "important");
     logoutDiv.style.setProperty("display", "none", "important");
+    if (addCommentDiv != null) {          
+      addCommentDiv.style.display = "none";
+    }
   } else {
     if (addPostBtn != null) {
       addPostBtn.style.setProperty("display", "block", "important");
+    }
+    if (addCommentDiv != null) {          
+      addCommentDiv.style.display = "flex";
     }
     loginDiv.style.setProperty("display", "none", "important");
     logoutDiv.style.setProperty("display", "flex", "important");
@@ -174,6 +181,7 @@ async function fetchPost() {
             </div>
             `;
   document.getElementById("post").innerHTML = postContent;
+  setupUI();
 }
 async function addComment(){
   try {
