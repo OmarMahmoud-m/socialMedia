@@ -38,6 +38,10 @@ body{
 .comments{
   background-color: rgb(235, 234, 234);
 }
-.edit-btn{
+.edit-btn,
+.delete-btn{
   float: right;
+}
+.delete-btn{
+  margin-left: 7px;
 }

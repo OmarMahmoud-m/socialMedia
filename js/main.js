@@ -23,7 +23,10 @@ async function fetchPosts(reload = true, page = 1) {
     let isMyPost = user != null && post.author.id == user.id;
     let editButtonContent = ``;
     if(isMyPost){
-      editButtonContent = `<button class="edit-btn btn btn-secondary" onClick='editPost("${encodeURIComponent(JSON.stringify(post))}")'>Edit</button>`
+      editButtonContent = `
+      <button class="delete-btn btn btn-danger " onClick='deletePost("${encodeURIComponent(JSON.stringify(post))}")'>Delete</button>
+      <button class="edit-btn btn btn-secondary" onClick='editPost("${encodeURIComponent(JSON.stringify(post))}")'>Edit</button>
+      `
     }
 
     postsHtmlContainer.innerHTML += `            <div class="card shadow mb-5">
@@ -220,6 +223,16 @@ function showAlert(customMessage, type = "success") {
   window.location = `postDetails.html?postId=${postId}`
  }
  function editPost(postObject){
+  let post = JSON.parse(decodeURIComponent(postObject))
+  document.getElementById("post-modal-submit-btn").innerHTML = "Update"
+  document.getElementById("post-id-input").value = post.id;
+  document.getElementById("post-modal-title").innerHTML = "Edit Post"
+  document.getElementById("post-title-input").value = post.title;
+  document.getElementById("post-body-input").value = post.body;
+  let postModal = new bootstrap.Modal(document.getElementById("create-post-modal"), {});
+  postModal.toggle();
+ }
+ function deletePost(postObject){
   let post = JSON.parse(decodeURIComponent(postObject))
   document.getElementById("post-modal-submit-btn").innerHTML = "Update"
   document.getElementById("post-id-input").value = post.id;
