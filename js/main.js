@@ -234,6 +234,7 @@ function showAlert(customMessage, type = "success") {
  }
  function deletePost(postObject){
   let post = JSON.parse(decodeURIComponent(postObject))
+  document.getElementById("delete-post-id-input").value = post.id;
   let postModal = new bootstrap.Modal(document.getElementById("delete-post-modal"), {});
   postModal.toggle();
  }
@@ -247,8 +248,27 @@ function showAlert(customMessage, type = "success") {
   let postModal = new bootstrap.Modal(document.getElementById("create-post-modal"), {});
   postModal.toggle();
  }
- function confirmPostDelete(){
-  alert("confirm")
+ async function confirmPostDelete(){
+  try {
+    const postId = document.getElementById("delete-post-id-input").value;
+      const headers = {
+    "authorization": `Bearer ${localStorage.getItem("token")}`
+  }
+    const response = await axios.delete(`${baseUrl}/posts/${postId}`, {
+      headers: headers
+    });
+    console.log(response)
+
+      const modal = document.getElementById("delete-post-modal");
+      const modalInstance = bootstrap.Modal.getInstance(modal);
+      modalInstance.hide();
+      showAlert("The Post Has Been Deleted Successfully", "success")
+      fetchPosts();
+    
+  } catch (error) {
+    const message = error.response.data.message;
+    showAlert(message, "danger")
+  }
  }
 fetchPosts();
 setupUI();
