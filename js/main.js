@@ -234,12 +234,7 @@ function showAlert(customMessage, type = "success") {
  }
  function deletePost(postObject){
   let post = JSON.parse(decodeURIComponent(postObject))
-  document.getElementById("post-modal-submit-btn").innerHTML = "Update"
-  document.getElementById("post-id-input").value = post.id;
-  document.getElementById("post-modal-title").innerHTML = "Edit Post"
-  document.getElementById("post-title-input").value = post.title;
-  document.getElementById("post-body-input").value = post.body;
-  let postModal = new bootstrap.Modal(document.getElementById("create-post-modal"), {});
+  let postModal = new bootstrap.Modal(document.getElementById("delete-post-modal"), {});
   postModal.toggle();
  }
  function addButtonClicked(){
@@ -251,6 +246,9 @@ function showAlert(customMessage, type = "success") {
   document.getElementById("post-body-input").value = "";
   let postModal = new bootstrap.Modal(document.getElementById("create-post-modal"), {});
   postModal.toggle();
+ }
+ function confirmPostDelete(){
+  alert("confirm")
  }
 fetchPosts();
 setupUI();
