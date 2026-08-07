@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="./css/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
-  <body>
-    <!--========= Modals ============-->
+<body>
+      <!--========= Modals ============-->
 
     <!-- Login Modal -->
     <div
@@ -68,6 +68,7 @@
       </div>
     </div>
     <!--// Login Modal //-->
+
     <!-- Register Modal -->
     <div
       class="modal fade"
@@ -254,7 +255,7 @@
     <!--// Create Delete Post Modal //-->
     <!--//============== Modals============ //-->
 
-    <!-- Alerts -->
+      <!-- Alerts -->
     <div id="success-alert" class="show fade"></div>
     <!--// Alerts //-->
 
@@ -346,19 +347,57 @@
     </div>
     <!--// NAV BAR //-->
 
-    <!-- MAIN CONTENT -->
+
+     <!-- MAIN CONTENT -->
     <div class="container mt-5">
       <div class="d-flex justify-content-center">
         <div class="col-9">
-          <div class="posts">
-            <!--POST-->
+          <!-- MAIN INFO -->
+          <div class="card shadow mb-5">
 
-            <!--POST//-->
+            <div class="card-body">
+              <div class="row">
+                <!-- USER IMAGE COLUMN -->
+                 <div class="col-2">
+                  <img id="header-img" src="./cat.png" alt="">
+                 </div>
+                <!--// USER IMAGE COLUMN //-->
+
+                <!-- USERNAME - EMAIL - NAME -->
+                 <div class="col-4 d-flex flex-column justify-content-evenly" >
+                  <div class="user-main-info">
+                    omar@gmail.com
+                  </div>
+
+                  <div class="user-main-info">
+                    Omar
+                  </div>
+
+                  <div class="user-main-info">
+                    omar123
+                  </div>
+                 </div>
+                <!--// USERNAME - EMAIL - NAME //-->
+
+                <!-- POSTS & COMMENTS COUNT -->
+                 <div class="col-4 d-flex flex-column justify-content-evenly">
+                  <div class="number-info">
+                    <span>13</span> Posts
+                  </div>
+                  <div class="number-info">
+                    <span>20</span> Comments
+                  </div>
+                 </div>
+                <!--// POSTS & COMMENTS COUNT //-->
+              </div>
+            </div>
           </div>
+          <!--// MAIN INFO //-->
         </div>
       </div>
     </div>
-    <!--// MAIN CONTENT //-->
-    <script src="./js/main.js"></script>
-  </body>
+
+<script src="./js/main.js"></script>
+<script src="./js/profilePageScript.js"></script>
+</body>
 </html>
