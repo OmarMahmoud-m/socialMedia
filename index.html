@@ -158,7 +158,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
+            <h1 class="modal-title fs-5" id="post-modal-title">
               Create A New Post
             </h1>
             <button
@@ -173,6 +173,7 @@
               <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Title</label>
                 <input type="text" class="form-control" id="post-title-input" />
+                <input type="hidden" id="post-id-input" value="">
               </div>
 
               <div class="mb-3">
@@ -194,6 +195,7 @@
               Close
             </button>
             <button
+              id="post-modal-submit-btn"
               type="button"
               class="btn btn-primary"
               onclick="createPost()"
@@ -215,8 +217,7 @@
     <i
       class="fa-solid fa-circle-plus rounded-circle text-primary"
       id="add-post-btn"
-      data-bs-toggle="modal"
-      data-bs-target="#create-post-modal"
+      onclick="addButtonClicked()"
     ></i>
     <!--// Add post Button //-->
 

@@ -19,10 +19,18 @@ async function fetchPosts(reload = true, page = 1) {
   }
   
   response.data.data.forEach((post) => {
+    let user = getCurrentUser();
+    let isMyPost = user != null && post.author.id == user.id;
+    let editButtonContent = ``;
+    if(isMyPost){
+      editButtonContent = `<button class="edit-btn btn btn-secondary" onClick='editPost("${encodeURIComponent(JSON.stringify(post))}")'>Edit</button>`
+    }
+
     postsHtmlContainer.innerHTML += `            <div class="card shadow mb-5">
               <h5 class="card-header">
                 <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
                 <b>@${post.author.username}</b>
+                ${editButtonContent}
               </h5>
               <div class="card-body" onClick="postClicked(${post.id})">
                 <img src="${post.image}" onerror="this.style.display='none'" class="w-100 mb-1" />
@@ -106,7 +114,7 @@ function logout(){
   
 }
 
-function showAlert(customMessage, type) {
+function showAlert(customMessage, type = "success") {
   const alertPlaceholder = document.getElementById("success-alert");
   const appendAlert = (message, type) => {
     const wrapper = document.createElement("div");
@@ -120,10 +128,7 @@ function showAlert(customMessage, type) {
     alertPlaceholder.append(wrapper);
   };  
   appendAlert(customMessage, type); 
-  setTimeout(() => {
-    const alertToHide = bootstrap.Alert.getOrCreateInstance('#success-alert')
-    alertToHide.close()
-  }, 2000)
+  
 
 }
  function setupUI(){
@@ -152,6 +157,9 @@ function showAlert(customMessage, type) {
 
  }
  async function createPost(){
+  let postId = document.getElementById("post-id-input").value;
+  let isCreate = postId == null || postId == "";
+  
   const title = document.getElementById("post-title-input").value;
   const body = document.getElementById("post-body-input").value;
   const image = document.getElementById("post-image-input").files[0];
@@ -162,12 +170,28 @@ function showAlert(customMessage, type) {
   formData.append("image",image)
 
   const headers = {
-    "Content-type": "multipart/form-data",
     "authorization": `Bearer ${localStorage.getItem("token")}`
   }
-
-  try {
-    const response = await axios.post(`${baseUrl}/posts`, formData, {
+  if(isCreate){
+      try {
+      const response = await axios.post(`${baseUrl}/posts`, formData, {
+        headers
+      });
+      console.log(response)
+      const modal = document.getElementById("create-post-modal");
+      const modalInstance = bootstrap.Modal.getInstance(modal);
+      modalInstance.hide();
+      showAlert("New Post Has Been Created", "success")
+      fetchPosts();
+      
+    } catch (error) {
+      const message = error.response.data.message;
+      showAlert(message, "danger")
+    }
+  }else{
+    formData.append("_method","put");
+    try {
+    const response = await axios.post(`${baseUrl}/posts/${postId}`, formData, {
       headers
     });
     console.log(response)
@@ -181,6 +205,8 @@ function showAlert(customMessage, type) {
     const message = error.response.data.message;
     showAlert(message, "danger")
   }
+  }
+  
  }
  function getCurrentUser(){
   let user = null;
@@ -192,6 +218,26 @@ function showAlert(customMessage, type) {
  }
  function postClicked(postId){
   window.location = `postDetails.html?postId=${postId}`
+ }
+ function editPost(postObject){
+  let post = JSON.parse(decodeURIComponent(postObject))
+  document.getElementById("post-modal-submit-btn").innerHTML = "Update"
+  document.getElementById("post-id-input").value = post.id;
+  document.getElementById("post-modal-title").innerHTML = "Edit Post"
+  document.getElementById("post-title-input").value = post.title;
+  document.getElementById("post-body-input").value = post.body;
+  let postModal = new bootstrap.Modal(document.getElementById("create-post-modal"), {});
+  postModal.toggle();
+ }
+ function addButtonClicked(){
+
+  document.getElementById("post-modal-submit-btn").innerHTML = "Create"
+  document.getElementById("post-id-input").value = "";
+  document.getElementById("post-modal-title").innerHTML = "Create A New Post"
+  document.getElementById("post-title-input").value = "";
+  document.getElementById("post-body-input").value = "";
+  let postModal = new bootstrap.Modal(document.getElementById("create-post-modal"), {});
+  postModal.toggle();
  }
 fetchPosts();
 setupUI();

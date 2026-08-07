@@ -38,3 +38,6 @@ body{
 .comments{
   background-color: rgb(235, 234, 234);
 }
+.edit-btn{
+  float: right;
+}
