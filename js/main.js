@@ -31,8 +31,10 @@ async function fetchPosts(reload = true, page = 1) {
 
     postsHtmlContainer.innerHTML += `            <div class="card shadow mb-5">
               <h5 class="card-header">
-                <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
-                <b>@${post.author.username}</b>
+              <span onclick="userClicked(${post.author.id})" style="cursor: pointer;">
+                  <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
+                  <b>@${post.author.username}</b>
+              </span>
                 ${editButtonContent}
               </h5>
               <div class="card-body" onClick="postClicked(${post.id})">
@@ -269,6 +271,14 @@ function showAlert(customMessage, type = "success") {
     const message = error.response.data.message;
     showAlert(message, "danger")
   }
+ }
+ function userClicked(userId){
+  window.location = `./profile.html?userid=${userId}`
+ }
+ function profileClicked(){
+  const user = getCurrentUser()
+  const userId = user.id
+  window.location = `./profile.html?userid=${userId}`
  }
 fetchPosts();
 setupUI();
