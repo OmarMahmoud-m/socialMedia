@@ -375,34 +375,32 @@
       <div class="d-flex justify-content-center">
         <div class="col-9">
           <!-- MAIN INFO -->
-          <div class="card shadow mb-5">
-            <div class="card-body">
-              <div class="row">
-                <!-- USER IMAGE COLUMN -->
-                <div class="col-2 d-flex align-items-center">
-                  <img id="header-img"  alt="" onerror="this.src='./noProfileImage.jpg'"/>
-                </div>
-                <!--// USER IMAGE COLUMN //-->
+<div class="card shadow mb-5">
+  <div class="card-body">
+    <div class="row align-items-center text-center text-md-start">
+      <!-- USER IMAGE COLUMN -->
+      <div class="col-12 col-md-2 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+        <img id="header-img" alt="" onerror="this.src='./noProfileImage.jpg'" class="img-fluid rounded-circle" style="max-width: 100px;" />
+      </div>
+      <!--// USER IMAGE COLUMN //-->
 
-                <!-- USERNAME - EMAIL - NAME -->
-                <div id="main-info" class="col-4 d-flex flex-column justify-content-evenly">
-                  <div class="user-main-info" id="main-info-email"></div>
+      <!-- USERNAME - EMAIL - NAME -->
+      <div id="main-info" class="col-12 col-md-4 d-flex flex-column justify-content-evenly mb-3 mb-md-0">
+        <div class="user-main-info" id="main-info-email"></div>
+        <div class="user-main-info" id="main-info-name"></div>
+        <div class="user-main-info" id="main-info-username"></div>
+      </div>
+      <!--// USERNAME - EMAIL - NAME //-->
 
-                  <div class="user-main-info" id="main-info-name"></div>
-
-                  <div class="user-main-info" id="main-info-username"></div>
-                </div>
-                <!--// USERNAME - EMAIL - NAME //-->
-
-                <!-- POSTS & COMMENTS COUNT -->
-                <div class="col-4 d-flex flex-column justify-content-evenly">
-                  <div class="number-info"><span id="posts-count"></span> Posts</div>
-                  <div class="number-info"><span id="comments-count"></span> Comments</div>
-                </div>
-                <!--// POSTS & COMMENTS COUNT //-->
-              </div>
-            </div>
-          </div>
+      <!-- POSTS & COMMENTS COUNT -->
+      <div class="col-12 col-md-4 d-flex flex-column justify-content-evenly">
+        <div class="number-info"><span id="posts-count"></span> Posts</div>
+        <div class="number-info"><span id="comments-count"></span> Comments</div>
+      </div>
+      <!--// POSTS & COMMENTS COUNT //-->
+    </div>
+  </div>
+</div>
           <!--// MAIN INFO //-->
 
           <!-- POST TITLE -->
