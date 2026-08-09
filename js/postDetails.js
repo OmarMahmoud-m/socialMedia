@@ -229,5 +229,10 @@ async function addComment(){
     document.getElementById("loader").style.visibility = 'hidden';
   }
  }
+  function profileClicked(){
+  const user = getCurrentUser()
+  const userId = user.id
+  window.location = `./profile.html?userid=${userId}`
+ }
 setupUI();
 fetchPost();

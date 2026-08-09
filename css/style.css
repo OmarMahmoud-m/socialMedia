@@ -173,3 +173,19 @@ body{
   align-items: center;
   z-index: 9999;
 }
+
+#back-to-top-btn {
+  position: fixed;
+  bottom: 30px;
+  left: 1%;
+  font-size: 40px;
+  cursor: pointer;
+  display: none;
+  z-index: 1000;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+
+#back-to-top-btn:hover {
+  opacity: 1;
+}

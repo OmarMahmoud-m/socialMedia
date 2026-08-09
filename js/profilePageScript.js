@@ -88,5 +88,14 @@ async function getPosts() {
     toggleLoader(false)
   }
  }
+ window.addEventListener("scroll", function () {
+  const backToTopBtn = document.getElementById("back-to-top-btn");
+  if (!backToTopBtn) return;
+  if (window.pageYOffset > 300) {
+    backToTopBtn.style.display = "block";
+  } else {
+    backToTopBtn.style.display = "none";
+  }
+});
 getUser();
 getPosts();
