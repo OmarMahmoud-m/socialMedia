@@ -22,7 +22,8 @@ async function login() {
     setupUI();
     showAlert("Logged in successfully", "success");
   } catch (error) {
-    console.log("Login error:", error.response.data);
+    const message = error.response.data.message;
+    showAlert(message, "danger");
   } finally{
     toggleLoader(false);
   }
