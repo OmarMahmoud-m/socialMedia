@@ -5,7 +5,7 @@ let lastPage = 1;
 
 //=====INFINITE SCROLL=====//
 window.addEventListener("scroll", function(){
-  const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
+  const endOfPage = window.innerHeight + window.pageYOffset >= document.body.scrollHeight;
   if(endOfPage && currentPage < lastPage){
     fetchPosts(false,++currentPage)
   }
