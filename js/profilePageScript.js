@@ -6,7 +6,9 @@ function getCurrentUserId(){
 }
 async function getUser(){
   const id = getCurrentUserId();
+  toggleLoader(true)
   const response = await axios.get(`${baseUrl}/users/${id}`);
+  toggleLoader(false);
   console.log(response.data.data)
   const user = response.data.data;
   document.getElementById("main-info-email").innerHTML = user.email;
@@ -19,7 +21,9 @@ async function getUser(){
 }
 async function getPosts() {
   const id = getCurrentUserId();
+  toggleLoader(true)
   const response = await axios.get(`${baseUrl}/users/${id}/posts`);
+  toggleLoader(false)
   console.log(response.data.data)
   const posts = response.data.data;
   document.getElementById("user-posts").innerHTML = "";
@@ -65,6 +69,7 @@ async function getPosts() {
       const headers = {
     "authorization": `Bearer ${localStorage.getItem("token")}`
   }
+    toggleLoader(true)
     const response = await axios.delete(`${baseUrl}/posts/${postId}`, {
       headers: headers
     });
@@ -79,6 +84,8 @@ async function getPosts() {
   } catch (error) {
     const message = error.response.data.message;
     showAlert(message, "danger")
+  }finally{
+    toggleLoader(false)
   }
  }
 getUser();

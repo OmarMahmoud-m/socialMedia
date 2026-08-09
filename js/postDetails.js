@@ -10,6 +10,7 @@ async function login() {
     password,
   };
   try {
+    toggleLoader(true);
     const response = await axios.post(`${baseUrl}/login`, params);
 
     localStorage.setItem("token", response.data.token);
@@ -22,6 +23,8 @@ async function login() {
     showAlert("Logged in successfully", "success");
   } catch (error) {
     console.log("Login error:", error.response.data);
+  } finally{
+    toggleLoader(false);
   }
 }
 
@@ -38,6 +41,7 @@ async function register() {
   formData.append("image", image);
 
   try {
+    toggleLoader(true);
     const response = await axios.post(`${baseUrl}/register`, formData);
     console.log("this is register data", response.data);
     localStorage.setItem("token", response.data.token);
@@ -51,6 +55,8 @@ async function register() {
   } catch (error) {
     const message = error.response.data.message;
     showAlert(message, "danger");
+  } finally{
+    toggleLoader(false);
   }
 }
 
@@ -95,6 +101,7 @@ function setupUI() {
     }
     loginDiv.style.setProperty("display", "flex", "important");
     logoutDiv.style.setProperty("display", "none", "important");
+    document.getElementById("profile-nav").style.setProperty("display", "none", "important")
     if (addCommentDiv != null) {          
       addCommentDiv.style.display = "none";
     }
@@ -107,6 +114,7 @@ function setupUI() {
     }
     loginDiv.style.setProperty("display", "none", "important");
     logoutDiv.style.setProperty("display", "flex", "important");
+    document.getElementById("profile-nav").style.setProperty("display", "flex", "important")
     const user = getCurrentUser();
     document.getElementById("navbar-user").innerHTML = user.username;
     document.getElementById("navbar-user-image").src = user.profile_image;
@@ -121,7 +129,9 @@ function getCurrentUser() {
   return user;
 }
 async function fetchPost() {
+  toggleLoader(true);
   const response = await axios.get(`${baseUrl}/posts/${id}`);
+  toggleLoader(false)
   const post = response.data.data;
   const comments = post.comments;
   const author = post.author;
@@ -190,6 +200,7 @@ async function addComment(){
     "body": commentBody
   }
   let token = localStorage.getItem("token");
+  toggleLoader(true);
   const response = await axios.post(`${baseUrl}/posts/${id}/comments`, params, {
     headers: {
       "authorization": `Bearer ${token}`
@@ -201,7 +212,17 @@ async function addComment(){
 } catch(error){
   const errorMessage = error.response.data.message;
   showAlert(errorMessage, "danger")
+} finally{
+  toggleLoader(false)
 }
+ }
+ function toggleLoader(show = true){
+  if(show){
+    document.getElementById("loader").style.visibility = 'visible';
+  }
+  else{
+    document.getElementById("loader").style.visibility = 'hidden';
+  }
  }
 setupUI();
 fetchPost();

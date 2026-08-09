@@ -5,6 +5,7 @@ let lastPage = 1;
 
 //=====INFINITE SCROLL=====//
 window.addEventListener("scroll", function(){
+  if (!postsHtmlContainer) return;
   const endOfPage = window.innerHeight + window.pageYOffset >= document.body.scrollHeight;
   if(endOfPage && currentPage < lastPage){
     fetchPosts(false,++currentPage)
@@ -12,7 +13,10 @@ window.addEventListener("scroll", function(){
 })
 
 async function fetchPosts(reload = true, page = 1) {
-  const response = await axios.get(`${baseUrl}/posts?limit=2&page=${page}`);
+  toggleLoader(true);
+  const response = await axios.get(`${baseUrl}/posts?limit=4&page=${page}`);
+  toggleLoader(false);
+  console.log(response.data.data)
   lastPage = response.data.meta.last_page;
   if(reload){
     postsHtmlContainer.innerHTML = "";
@@ -64,8 +68,9 @@ async function login() {
     password
   };
   try {
+    toggleLoader(true);
     const response = await axios.post(`${baseUrl}/login`, params);
-
+    
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
 
@@ -76,7 +81,10 @@ async function login() {
     showAlert("Logged in successfully", "success");
     
   } catch (error) {
-    console.log("Login error:", error.response.data);
+    const message = error.response.data.message;
+    showAlert(message, "danger")
+  }finally{
+    toggleLoader(false)
   }
 }
 
@@ -94,6 +102,7 @@ async function register(){
   
 
   try {
+    toggleLoader(true);
     const response = await axios.post(`${baseUrl}/register`, formData);
     console.log("this is register data", response.data)
     localStorage.setItem("token", response.data.token);
@@ -108,6 +117,8 @@ async function register(){
   } catch (error) {
     const message = error.response.data.message;
     showAlert(message, "danger")
+  }finally{
+    toggleLoader(false);
   } 
 }
 
@@ -150,11 +161,13 @@ function showAlert(customMessage, type = "success") {
     loginDiv.style.setProperty("display", "flex", "important")
     logoutDiv.style.setProperty("display", "none", "important")
     addPostBtn.style.setProperty("display", "none", "important")
+    document.getElementById("profile-nav").style.setProperty("display", "none", "important")
   }
   else{
     loginDiv.style.setProperty("display", "none", "important")
     logoutDiv.style.setProperty("display", "flex", "important")
     addPostBtn.style.setProperty("display", "block", "important")
+    document.getElementById("profile-nav").style.setProperty("display", "flex", "important")
     const user = getCurrentUser();
     document.getElementById("navbar-user").innerHTML = user.username;
     document.getElementById("navbar-user-image").src = user.profile_image
@@ -179,6 +192,7 @@ function showAlert(customMessage, type = "success") {
   }
   if(isCreate){
       try {
+      toggleLoader(true);
       const response = await axios.post(`${baseUrl}/posts`, formData, {
         headers
       });
@@ -192,10 +206,13 @@ function showAlert(customMessage, type = "success") {
     } catch (error) {
       const message = error.response.data.message;
       showAlert(message, "danger")
+    } finally{
+      toggleLoader(false)
     }
   }else{
     formData.append("_method","put");
     try {
+    toggleLoader(true);
     const response = await axios.post(`${baseUrl}/posts/${postId}`, formData, {
       headers
     });
@@ -209,6 +226,8 @@ function showAlert(customMessage, type = "success") {
   } catch (error) {
     const message = error.response.data.message;
     showAlert(message, "danger")
+  } finally{
+    toggleLoader(false);
   }
   }
   
@@ -256,6 +275,7 @@ function showAlert(customMessage, type = "success") {
       const headers = {
     "authorization": `Bearer ${localStorage.getItem("token")}`
   }
+    toggleLoader(true);
     const response = await axios.delete(`${baseUrl}/posts/${postId}`, {
       headers: headers
     });
@@ -270,6 +290,8 @@ function showAlert(customMessage, type = "success") {
   } catch (error) {
     const message = error.response.data.message;
     showAlert(message, "danger")
+  } finally{
+    toggleLoader(false);
   }
  }
  function userClicked(userId){
@@ -279,6 +301,14 @@ function showAlert(customMessage, type = "success") {
   const user = getCurrentUser()
   const userId = user.id
   window.location = `./profile.html?userid=${userId}`
+ }
+ function toggleLoader(show = true){
+  if(show){
+    document.getElementById("loader").style.visibility = 'visible';
+  }
+  else{
+    document.getElementById("loader").style.visibility = 'hidden';
+  }
  }
 fetchPosts();
 setupUI();
