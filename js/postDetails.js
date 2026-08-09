@@ -159,8 +159,10 @@ async function fetchPost() {
   }
   const postContent = `<div class="card shadow mb-5">
               <h5 class="card-header">
-                <img src="${author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
-                <b>@${author.username}</b>
+                <span onclick="userClicked(${post.author.id})" style="cursor: pointer;">
+                  <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
+                  <b>@${post.author.username}</b>
+              </span>
               </h5>
               <div class="card-body">
                 <img src="${post.image}" onerror="this.style.display='none'" class="w-100 mb-1" />
@@ -193,6 +195,9 @@ async function fetchPost() {
   document.getElementById("post").innerHTML = postContent;
   setupUI();
 }
+ function userClicked(userId){
+  window.location = `./profile.html?userid=${userId}`
+ }
 async function addComment(){
   try {
   let commentBody = document.getElementById("comment-input").value;
