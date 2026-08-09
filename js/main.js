@@ -4,13 +4,21 @@ let currentPage = 1;
 let lastPage = 1;
 
 //=====INFINITE SCROLL=====//
-window.addEventListener("scroll", function(){
-  if (!postsHtmlContainer) return;
-  const endOfPage = window.innerHeight + window.pageYOffset >= document.body.scrollHeight;
-  if(endOfPage && currentPage < lastPage){
-    fetchPosts(false,++currentPage)
-  }
-})
+const sentinel = document.getElementById("scroll-sentinel");
+
+if (sentinel) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && currentPage < lastPage) {
+        fetchPosts(false, ++currentPage);
+      }
+    });
+  }, {
+    rootMargin: "100px" // trigger 100px before it's actually visible
+  });
+
+  observer.observe(sentinel);
+}
 
 async function fetchPosts(reload = true, page = 1) {
   toggleLoader(true);
