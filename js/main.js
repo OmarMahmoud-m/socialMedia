@@ -150,10 +150,12 @@ function showAlert(customMessage, type = "success") {
     ].join("");
 
     alertPlaceholder.append(wrapper);
+
+    setTimeout(() => {
+      wrapper.remove();
+    }, 3000);
   };  
   appendAlert(customMessage, type); 
-  
-
 }
  function setupUI(){
   const token = localStorage.getItem("token");
