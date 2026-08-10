@@ -137,7 +137,7 @@ async function fetchPost() {
   const comments = post.comments;
   const author = post.author;
 
-  document.getElementById("username-h1").innerHTML = `${author.username} Post`;
+  document.getElementById("username-h1").innerHTML = `${author.username}'s Post`;
   let commentsContent = ``;
 
   for (comment of comments) {
