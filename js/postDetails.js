@@ -66,6 +66,7 @@ function logout() {
   localStorage.removeItem("user");
   setupUI();
   showAlert("Logged out successfully", "success");
+  fetchPost()
 }
 
 function showAlert(customMessage, type) {
