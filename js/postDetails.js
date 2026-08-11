@@ -21,6 +21,7 @@ async function login() {
     modalInstance.hide();
     setupUI();
     showAlert("Logged in successfully", "success");
+    fetchPost()
   } catch (error) {
     const message = error.response.data.message;
     showAlert(message, "danger");

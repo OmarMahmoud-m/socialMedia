@@ -88,6 +88,25 @@ async function getPosts() {
     toggleLoader(false)
   }
  }
+ function checkProfileOwnership() {
+  const user = getCurrentUser(); // Get logged-in user object from localStorage
+  const currentProfileId = getCurrentUserId(); // Get 'userid' parameter from URL
+
+  const addPostBtn = document.getElementById("add-post-btn");
+
+  if (!addPostBtn) return;
+
+  // Show "Add Post" button ONLY if user is logged in AND viewing their own profile
+  if (user && user.id == currentProfileId) {
+    addPostBtn.style.setProperty("display", "block", "important");
+  } else {
+    addPostBtn.style.setProperty("display", "none", "important");
+  }
+}
+
+// Call this right after setupUI() in profilePageScript.js
+setupUI();
+checkProfileOwnership();
  window.addEventListener("scroll", function () {
   const backToTopBtn = document.getElementById("back-to-top-btn");
   if (!backToTopBtn) return;
