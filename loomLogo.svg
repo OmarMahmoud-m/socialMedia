@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="loomGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b47" />
+      <stop offset="100%" stop-color="#d8a94e" />
+    </linearGradient>
+  </defs>
+  <!-- Orange Brand Icon Only -->
+  <rect x="8" y="8" width="48" height="48" rx="14" fill="url(#loomGrad)" />
+</svg>
