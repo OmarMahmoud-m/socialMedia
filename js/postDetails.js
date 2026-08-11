@@ -91,10 +91,10 @@ function setupUI() {
   const token = localStorage.getItem("token");
 
   const loginDiv = document.getElementById("login-div");
-
   const logoutDiv = document.getElementById("logout-div");
   const addPostBtn = document.getElementById("add-post-btn");
   const addCommentDiv = document.getElementById("add-comment-div");
+  const profileNav = document.getElementById("profile-nav");
 
   if (token == null) {
     if (addPostBtn != null) {
@@ -102,23 +102,36 @@ function setupUI() {
     }
     loginDiv.style.setProperty("display", "flex", "important");
     logoutDiv.style.setProperty("display", "none", "important");
-    document.getElementById("profile-nav").style.setProperty("display", "none", "important")
+    
+    if (profileNav != null) {
+      profileNav.style.setProperty("display", "none", "important");
+    }
+
+    /* Force hide comment input for logged-out users */
     if (addCommentDiv != null) {          
-      addCommentDiv.style.display = "none";
+      addCommentDiv.style.setProperty("display", "none", "important");
     }
   } else {
     if (addPostBtn != null) {
       addPostBtn.style.setProperty("display", "block", "important");
     }
-    if (addCommentDiv != null) {          
-      addCommentDiv.style.display = "flex";
-    }
     loginDiv.style.setProperty("display", "none", "important");
     logoutDiv.style.setProperty("display", "flex", "important");
-    document.getElementById("profile-nav").style.setProperty("display", "flex", "important")
+    
+    if (profileNav != null) {
+      profileNav.style.setProperty("display", "flex", "important");
+    }
+
+    /* Show comment input for logged-in users */
+    if (addCommentDiv != null) {          
+      addCommentDiv.style.setProperty("display", "flex", "important");
+    }
+
     const user = getCurrentUser();
-    document.getElementById("navbar-user").innerHTML = user.username;
-    document.getElementById("navbar-user-image").src = user.profile_image;
+    if (user) {
+      document.getElementById("navbar-user").innerHTML = user.username;
+      document.getElementById("navbar-user-image").src = user.profile_image;
+    }
   }
 }
 function getCurrentUser() {
@@ -131,56 +144,49 @@ function getCurrentUser() {
 }
 async function fetchPost() {
   toggleLoader(true);
-  const response = await axios.get(`${baseUrl}/posts/${id}`);
-  toggleLoader(false)
-  const post = response.data.data;
-  const comments = post.comments;
-  const author = post.author;
+  try {
+    const response = await axios.get(`${baseUrl}/posts/${id}`);
+    const post = response.data.data;
+    const comments = post.comments;
+    const author = post.author;
 
-  document.getElementById("username-h1").innerHTML = `${author.username}'s Post`;
-  let commentsContent = ``;
+    document.getElementById("username-h1").innerHTML = `${author.username}'s Post`;
+    
+    let commentsContent = ``;
 
-  for (comment of comments) {
-    commentsContent += `<!-- COMMENT -->
-          <div class="comments p-3">
-            <!-- PFP + USERNAME -->
-            <div class= "d-flex align-items-center gap-2">
-              <img src="${comment.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="comment-pfp rounded-circle" alt="">
-              <b>${comment.author.username}</b>
-            </div>
-            <!--// PFP + USERNAME //-->
-
-            <!-- COMMENTS BODY -->
-            <div class="mt-1">
-              ${comment.body}
-            </div>
-            <!--// COMMENTS BODY //-->
+    for (let comment of comments) {
+      commentsContent += `
+        <!-- COMMENT -->
+        <div class="comments p-3">
+          <div class="d-flex align-items-center gap-2">
+            <img src="${comment.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="comment-pfp rounded-circle" alt="">
+            <b>${comment.author.username}</b>
           </div>
-          <!--// COMMENT //-->`;
-  }
-  const postContent = `<div class="card shadow mb-5">
-              <h5 class="card-header">
-                <span onclick="userClicked(${post.author.id})" style="cursor: pointer;">
-                  <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
-                  <b>@${post.author.username}</b>
-              </span>
-              </h5>
-              <div class="card-body">
-                <img src="${post.image}" onerror="this.style.display='none'" class="w-100 mb-1" />
-                <h6>${post.created_at}</h6>
-                <h5>${post.title ? post.title : ""}</h5>
-                <p>
-                  ${post.body}
-                </p>
-                <hr />
-                <div>
-                  <i
-                    class="fa-solid fa-message"
-                    style="color: rgb(128, 131, 131)"
-                  ></i>
-                  <span>(${post.comments_count}) comments</span>
-                </div>
-              </div>
+          <div class="mt-1">
+            ${comment.body}
+          </div>
+        </div>`;
+    }
+
+    const postContent = `
+      <div class="card shadow mb-5">
+        <h5 class="card-header">
+          <span onclick="userClicked(${post.author.id})" style="cursor: pointer;">
+            <img src="${post.author.profile_image}" onerror="this.src='./noProfileImage.jpg'" class="rounded-circle border border-2 profile-img" />
+            <b>@${post.author.username}</b>
+          </span>
+        </h5>
+        <div class="card-body">
+          <img src="${post.image}" onerror="this.style.display='none'" class="w-100 mb-1" />
+          <h6>${post.created_at}</h6>
+          <h5>${post.title ? post.title : ""}</h5>
+          <p>${post.body}</p>
+          <hr />
+          <div>
+            <i class="fa-solid fa-message" style="color: rgb(128, 131, 131)"></i>
+            <span>(${post.comments_count}) comments</span>
+          </div>
+        </div>
         
         <div id="comments">
           ${commentsContent}
@@ -190,11 +196,16 @@ async function fetchPost() {
           <input id="comment-input" type="text" placeholder="Add Comment" class="form-control">
           <button class="btn btn-outline-primary" type="button" onClick="addComment()">send</button>
         </div>
-        
-            </div>
-            `;
-  document.getElementById("post").innerHTML = postContent;
-  setupUI();
+      </div>`;
+
+    document.getElementById("post").innerHTML = postContent;
+  } catch (error) {
+    showAlert("Failed to load post details", "danger");
+  } finally {
+    toggleLoader(false);
+    /* Re-evaluate UI state after dynamic DOM injection */
+    setupUI();
+  }
 }
  function userClicked(userId){
   window.location = `./profile.html?userid=${userId}`
@@ -235,5 +246,6 @@ async function addComment(){
   const userId = user.id
   window.location = `./profile.html?userid=${userId}`
  }
+
 setupUI();
 fetchPost();
