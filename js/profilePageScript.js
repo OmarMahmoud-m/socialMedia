@@ -25,7 +25,7 @@ async function getPosts() {
   const response = await axios.get(`${baseUrl}/users/${id}/posts`);
   toggleLoader(false)
   console.log(response.data.data)
-  const posts = response.data.data;
+  const posts = response.data.data.sort((a, b) => b.id - a.id);
   document.getElementById("user-posts").innerHTML = "";
   response.data.data.forEach((post) => {
     let user = getCurrentUser();

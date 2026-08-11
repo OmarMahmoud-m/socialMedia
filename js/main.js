@@ -184,64 +184,67 @@ function showAlert(customMessage, type = "success") {
   }
 
  }
- async function createPost(){
+async function createPost() {
   let postId = document.getElementById("post-id-input").value;
   let isCreate = postId == null || postId == "";
-  
+
   const title = document.getElementById("post-title-input").value;
   const body = document.getElementById("post-body-input").value;
-  const image = document.getElementById("post-image-input").files[0];
+  const imageInput = document.getElementById("post-image-input");
+  const image = imageInput.files[0];
 
   let formData = new FormData();
-  formData.append("body",body)
-  formData.append("title",title)
-  formData.append("image",image)
+  formData.append("body", body);
+  formData.append("title", title);
+
+  // ONLY attach image if a file was selected
+  if (image) {
+    formData.append("image", image);
+  }
 
   const headers = {
-    "authorization": `Bearer ${localStorage.getItem("token")}`
-  }
-  if(isCreate){
-      try {
+    authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
+
+  if (isCreate) {
+    try {
       toggleLoader(true);
-      const response = await axios.post(`${baseUrl}/posts`, formData, {
-        headers
-      });
-      console.log(response)
+      const response = await axios.post(`${baseUrl}/posts`, formData, { headers });
+      
       const modal = document.getElementById("create-post-modal");
       const modalInstance = bootstrap.Modal.getInstance(modal);
       modalInstance.hide();
-      showAlert("New Post Has Been Created", "success")
+      showAlert("New Post Has Been Created", "success");
       fetchPosts();
-      
     } catch (error) {
-      const message = error.response.data.message;
-      showAlert(message, "danger")
-    } finally{
-      toggleLoader(false)
+      const message = error.response?.data?.message || "Error creating post";
+      showAlert(message, "danger");
+    } finally {
+      toggleLoader(false);
     }
-  }else{
-    formData.append("_method","put");
+  } else {
+    formData.append("_method", "put");
     try {
-    toggleLoader(true);
-    const response = await axios.post(`${baseUrl}/posts/${postId}`, formData, {
-      headers
-    });
-    console.log(response)
-    const modal = document.getElementById("create-post-modal");
-    const modalInstance = bootstrap.Modal.getInstance(modal);
-    modalInstance.hide();
-    showAlert("New Post Has Been Created", "success")
-    fetchPosts();
-    
-  } catch (error) {
-    const message = error.response.data.message;
-    showAlert(message, "danger")
-  } finally{
-    toggleLoader(false);
+      toggleLoader(true);
+      const response = await axios.post(`${baseUrl}/posts/${postId}`, formData, { headers });
+
+      const modal = document.getElementById("create-post-modal");
+      const modalInstance = bootstrap.Modal.getInstance(modal);
+      modalInstance.hide();
+      showAlert("Post Updated Successfully", "success");
+      
+      // Clear file input after updating
+      imageInput.value = "";
+      
+      fetchPosts();
+    } catch (error) {
+      const message = error.response?.data?.message || "Error updating post";
+      showAlert(message, "danger");
+    } finally {
+      toggleLoader(false);
+    }
   }
-  }
-  
- }
+}
  function getCurrentUser(){
   let user = null;
   const storageUser = localStorage.getItem("user");
